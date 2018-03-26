@@ -1,10 +1,7 @@
 "use strict";
 
 /*
-   New Perspectives on HTML5, CSS3, and JavaScript 6th Edition
-   Tutorial 13
-   Tutorial Case
-
+   Exercise 07_06
    Payment Form Script
    
    Author: 
@@ -43,4 +40,3 @@
       Returns true of idNum satisfies the Luhn Algorithm
 
 */
-

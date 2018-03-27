@@ -28,7 +28,19 @@ window.addEventListener("load", function() {
     var orderForm = document.forms.orderForm;
     orderForm.elements.orderDate.value = new Date().toDateString();
     orderForm.elements.model.focus();
+
+    // Call to the calcOrder function
     calcOrder();
+
+    // Event handlers for the web form
+    orderForm.elements.model.onchange = calcOrder;
+    orderForm.elements.qty.onchange = calcOrder;
+
+    // Loop to choose option buttons for protection plan
+    var planOptions = document.querySelectorAll('input[name="protection"]');
+    for (var i = 0; i < planOptions.length; i++) {
+        planOptions[i].onclick = calcOrder;
+    }
 });
 
 //calcOrder()
@@ -45,5 +57,32 @@ function calcOrder() {
 
     // Initial cost = model cost x quantity
     var initialCost = mCost * quantity;
-    orderForm.elements.initialCost.value = initialCost;
+    orderForm.elements.initialCost.value = formatUSCurrency(initialCost);
+
+    // Retrieve the cost of the user's protection plan
+    var pCost = document.querySelector('input[name="protection"]:checked').value * quantity;
+    orderForm.elements.protectionCost.value = formatNumber(pCost, 2);
+
+    // Calculate the order subtotal
+    orderForm.elements.subtotal.value = formatNumber(initialCost + pCost, 2);
+
+    // Calculate the sales tax
+    var salesTax = 0.05 * (initialCost + pCost);
+    orderForm.elements.salesTax.value = formatNumber(salesTax, 2);
+
+    // Calculate the cost of the total order
+    var totalCost = initialCost + pCost + salesTax;
+    orderForm.elements.totalCost.value = formatUSCurrency(totalCost);
+
+    // Store the order details
+    orderForm.elements.modelName.value = orderForm.elements.model.options[mIndex].text;
+    orderForm.elements.protectionName.value = document.querySelector('input[name="protection"]:checked').nextSibling.nodeValue;
+}
+
+function formatNumber(val, decimals) {
+    return val.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+function formatUSCurrency(val) {
+    return val.toLocaleString('en-US', { style: "currency", currency: "USD" });
 }

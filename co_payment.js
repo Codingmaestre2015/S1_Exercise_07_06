@@ -40,3 +40,8 @@
       Returns true of idNum satisfies the Luhn Algorithm
 
 */
+
+window.addEventListener("load", function() {
+    // Retrieve the field/value pairs from the URL
+    var formData = location.search.slice(1);
+})
